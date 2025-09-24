@@ -1,0 +1,41 @@
+%%[
+
+/***Are we in Daylight Savings Time***/
+set @date = AttributeValue("")  /***Replace with Data field you want to eval***/
+set @month = FormatNumber(FormatDate(@date,"MM"),"g")
+set @day = FormatNumber(FormatDate(@date,"dd"),"g")
+set @dayofweek = FormatDate(@date,"dddd")
+
+if (@dayofweek == "Sun") THEN
+set @dow = 0 
+elseif (@dayofweek == "Mon") THEN
+set @dow = 1
+elseif (@dayofweek == "Tue") THEN
+set @dow = 2
+elseif (@dayofweek == "Wed") THEN
+set @dow = 3
+elseif (@dayofweek == "Thu") THEN
+set @dow = 4
+elseif (@dayofweek == "Fri") THEN
+set @dow = 5
+elseif (@dayofweek == "Sat") THEN 
+set @dow = 6
+endif
+
+if (@dow >= 0) THEN
+set @previousSunday = Subtract(@day,@dow)
+endif
+
+if (@month < 3 OR @month > 11) THEN
+set @savings = 0
+elseif (@month > 3 AND @month < 11) THEN
+set @savings = 1
+elseif (@month == 3 AND @previousSunday >= 8) THEN
+set @savings = 1
+elseif (@month == 11 AND @previousSunday <=0) THEN
+set @savings = 1
+ELSE
+set @savings = 0
+endif
+
+]%%
